@@ -10,7 +10,7 @@ import (
 	"sync"
 )
 
-const appStateDirName = "boost-browser"
+const appStateDirName = "browser-manager"
 
 type roots struct {
 	installRoot string
