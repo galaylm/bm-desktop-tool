@@ -56,7 +56,7 @@ var cacheDirPatterns = []string{
 	"Default/GPUCache",
 	"Default/blob_storage",
 	"Default/Service Worker/CacheStorage",
-	"Default/Storage",
+	// "Default/Storage",  // 已移除：包含 ext/*/def/ 下的扩展 IndexedDB 数据（MetaMask/Rabby 等钱包）
 	"Dictionaries",
 }
 
