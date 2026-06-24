@@ -1,12 +1,12 @@
 ﻿$ErrorActionPreference = 'Stop'
 
-# Boost Browser 完整版安装包（带 chromium 内核 + 代理二进制 + 资源）
+# Browser Manager 完整版安装包（带 chromium 内核 + 代理二进制 + 资源）
 #
 # 与 build_release.ps1（薄安装包，~17MB，仅 wails app + updater）独立，
 # 不互相覆盖，输出到 build\release\Boost-Browser-Setup-Full-v<ver>.exe。
 #
 # 内容（对齐老 BrowserManager_cloak_Setup.exe 425MB 的功能集）：
-#   - boost-browser.exe          ← 刚 wails build 出来的最新版
+#   - browser-manager.exe          ← 刚 wails build 出来的最新版
 #   - updater.exe                ← 刚 go build 出来的最新版
 #   - chrome\cloak-146.0.7680.177\ ← cloak chromium 内核（默认）
 #   - chrome\google-148.0.7778.167\ ← google chrome 备用内核
@@ -48,19 +48,19 @@ Write-Host "==> 目标版本: v$Version" -ForegroundColor Cyan
 Write-Host "==> 输出: $OutExe" -ForegroundColor Cyan
 
 # ---------------------------------------------------------------------------
-# [1/7] 先跑 build_release.ps1 编译最新 boost-browser.exe + updater.exe
+# [1/7] 先跑 build_release.ps1 编译最新 browser-manager.exe + updater.exe
 # ---------------------------------------------------------------------------
 if (-not $SkipBuild) {
-    Write-Host "`n==> [1/7] 调用 build_release.ps1 编译最新 boost-browser.exe + updater.exe" -ForegroundColor Yellow
+    Write-Host "`n==> [1/7] 调用 build_release.ps1 编译最新 browser-manager.exe + updater.exe" -ForegroundColor Yellow
     & powershell -NoProfile -ExecutionPolicy Bypass -File "$RepoRoot\scripts\build_release.ps1"
     if ($LASTEXITCODE -ne 0) { throw "build_release.ps1 失败" }
 } else {
     Write-Host "`n==> [1/7] -SkipBuild，跳过编译" -ForegroundColor DarkYellow
 }
 
-$BoostExe   = Join-Path $ReleaseDir 'boost-browser.exe'
+$BrowserManagerExe   = Join-Path $ReleaseDir 'browser-manager.exe'
 $UpdaterExe = Join-Path $ReleaseDir 'updater.exe'
-if (!(Test-Path $BoostExe))   { throw "Missing $BoostExe" }
+if (!(Test-Path $BrowserManagerExe))   { throw "Missing $BrowserManagerExe" }
 if (!(Test-Path $UpdaterExe)) { throw "Missing $UpdaterExe" }
 
 # ---------------------------------------------------------------------------
@@ -71,7 +71,7 @@ Remove-Item -Recurse -Force $Stage -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force -Path $Stage | Out-Null
 
 # 主程序 + updater
-Copy-Item $BoostExe   $Stage -Force
+Copy-Item $BrowserManagerExe   $Stage -Force
 Copy-Item $UpdaterExe $Stage -Force
 
 # 资源文件（图标、png）
@@ -134,7 +134,7 @@ function New-GradientBitmap([string]$Path, [int]$Width, [int]$Height, [bool]$Hea
     if ($Header) {
         $font  = New-Object System.Drawing.Font 'Segoe UI', 10, ([System.Drawing.FontStyle]::Bold)
         $font2 = New-Object System.Drawing.Font 'Segoe UI', 7
-        $g.DrawString('Boost Browser', $font, $white, 12, 7)
+        $g.DrawString('Browser Manager', $font, $white, 12, 7)
         $g.DrawString("Full installer v$Version", $font2, $muted, 12, 29)
         $g.FillEllipse($accent, $Width - 44, 10, 24, 24)
         $font.Dispose(); $font2.Dispose()
@@ -184,8 +184,8 @@ Write-Host ("    -> {0} 条 NSIS 指令 -> {1}" -f $out.Count, $NshPath) -Foregr
 Write-Host "`n==> [5/7] 生成 .nsi 主脚本" -ForegroundColor Yellow
 $nsi = @"
 Unicode True
-!define PRODUCT_NAME "Boost Browser"
-!define PRODUCT_EXE "boost-browser.exe"
+!define PRODUCT_NAME "Browser Manager"
+!define PRODUCT_EXE "browser-manager.exe"
 !define PRODUCT_VERSION "$Version"
 !define UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\BrowserManager"
 !define APP_ICON "$Icon"
@@ -197,7 +197,7 @@ Unicode True
 
 Name "`${PRODUCT_NAME} `${PRODUCT_VERSION}"
 OutFile "$OutExe"
-InstallDir "`$LOCALAPPDATA\Programs\Boost Browser"
+InstallDir "`$LOCALAPPDATA\Programs\Browser Manager"
 InstallDirRegKey HKCU "`${UNINSTALL_KEY}" "InstallLocation"
 RequestExecutionLevel user
 SetCompressor zlib
@@ -211,13 +211,13 @@ UninstallIcon "`${APP_ICON}"
 !define MUI_HEADERIMAGE_UNBITMAP "`${HEADER_BMP}"
 !define MUI_ABORTWARNING
 
-!define MUI_WELCOMEPAGE_TITLE "欢迎安装 Boost Browser v`${PRODUCT_VERSION}"
-!define MUI_WELCOMEPAGE_TEXT "Boost Browser 是一款指纹浏览器，安装包内含：`$\r`$\n  · Chromium 146 (cloak 内核，默认)`$\r`$\n  · Google Chrome 148 (备用内核)`$\r`$\n  · sing-box / xray 代理后端`$\r`$\n`$\r`$\n安装完成后即可使用，所有用户数据保存在安装目录下。"
+!define MUI_WELCOMEPAGE_TITLE "欢迎安装 Browser Manager v`${PRODUCT_VERSION}"
+!define MUI_WELCOMEPAGE_TEXT "Browser Manager 是一款指纹浏览器，安装包内含：`$\r`$\n  · Chromium 146 (cloak 内核，默认)`$\r`$\n  · Google Chrome 148 (备用内核)`$\r`$\n  · sing-box / xray 代理后端`$\r`$\n`$\r`$\n安装完成后即可使用，所有用户数据保存在安装目录下。"
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_RUN "`$INSTDIR\`${PRODUCT_EXE}"
-!define MUI_FINISHPAGE_RUN_TEXT "立即启动 Boost Browser"
+!define MUI_FINISHPAGE_RUN_TEXT "立即启动 Browser Manager"
 !define MUI_FINISHPAGE_TITLE "安装完成"
 !define MUI_FINISHPAGE_TEXT "默认内核 Chromium 146 已就绪。`$\r`$\n如需切换内核，可在应用内的内核管理界面操作。"
 !insertmacro MUI_PAGE_FINISH
@@ -244,7 +244,7 @@ retry_close:
   FileWrite `$9 "`$`$ErrorActionPreference = 'SilentlyContinue'`$\r`$\n"
   FileWrite `$9 "`$`$root = [IO.Path]::GetFullPath(`$`$InstallDir).TrimEnd('\\')`$\r`$\n"
   FileWrite `$9 "`$`$rootSlash = `$`$root + '\\'`$\r`$\n"
-  FileWrite `$9 "`$`$critical = @([IO.Path]::Combine(`$`$root, 'boost-browser.exe'))`$\r`$\n"
+  FileWrite `$9 "`$`$critical = @([IO.Path]::Combine(`$`$root, 'browser-manager.exe'))`$\r`$\n"
   FileWrite `$9 "Get-ChildItem -LiteralPath ([IO.Path]::Combine(`$`$root, 'chrome')) -Directory -ErrorAction SilentlyContinue | ForEach-Object { `$`$critical += [IO.Path]::Combine(`$`$_.FullName, 'chrome.exe'); `$`$critical += [IO.Path]::Combine(`$`$_.FullName, 'chrome.dll') }`$\r`$\n"
   FileWrite `$9 "for (`$`$round = 0; `$`$round -lt 5; `$`$round++) {`$\r`$\n"
   FileWrite `$9 "  `$`$procs = Get-CimInstance Win32_Process | Where-Object { `$`$_.ExecutablePath -and ([IO.Path]::GetFullPath(`$`$_.ExecutablePath).StartsWith(`$`$rootSlash, [StringComparison]::OrdinalIgnoreCase)) }`$\r`$\n"
@@ -299,7 +299,7 @@ retry_close:
   `${If} `$0 == 12
     MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "安装目录文件仍被占用。请关闭相关程序后重试。`$\r`$\n`$\r`$\n阻塞进程：`$1" IDRETRY retry_close IDCANCEL abort_install
   `${ElseIf} `$0 != 0
-    MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "Boost Browser 或内置 Chromium 仍在运行。请关闭所有浏览器窗口、扩展弹窗后重试。" IDRETRY retry_close IDCANCEL abort_install
+    MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "Browser Manager 或内置 Chromium 仍在运行。请关闭所有浏览器窗口、扩展弹窗后重试。" IDRETRY retry_close IDCANCEL abort_install
   `${EndIf}
   Sleep 300
   Goto done
@@ -309,7 +309,7 @@ abort_install:
 done:
 FunctionEnd
 
-Section "Boost Browser" SecMain
+Section "Browser Manager" SecMain
   SectionIn RO
   Call CloseBoostProcesses
   SetOutPath "`$INSTDIR"
@@ -324,7 +324,7 @@ Section "Boost Browser" SecMain
 
   WriteRegStr   HKCU "`${UNINSTALL_KEY}" "DisplayName"     "`${PRODUCT_NAME}"
   WriteRegStr   HKCU "`${UNINSTALL_KEY}" "DisplayVersion"  "`${PRODUCT_VERSION}"
-  WriteRegStr   HKCU "`${UNINSTALL_KEY}" "Publisher"       "Boost Browser"
+  WriteRegStr   HKCU "`${UNINSTALL_KEY}" "Publisher"       "Browser Manager"
   WriteRegStr   HKCU "`${UNINSTALL_KEY}" "InstallLocation" "`$INSTDIR"
   WriteRegStr   HKCU "`${UNINSTALL_KEY}" "UninstallString" "`$INSTDIR\Uninstall.exe"
   WriteRegStr   HKCU "`${UNINSTALL_KEY}" "DisplayIcon"     "`$INSTDIR\`${PRODUCT_EXE}"

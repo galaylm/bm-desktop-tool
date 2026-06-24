@@ -26,7 +26,7 @@ $sidebarBmp = Join-Path $project 'publish\boost_cloak_sidebar.bmp'
 $headerBmp  = Join-Path $project 'publish\boost_cloak_header.bmp'
 
 if (!(Test-Path $src))                                  { throw "Missing source dir: $src" }
-if (!(Test-Path (Join-Path $src 'boost-browser.exe')))  { throw "Missing boost-browser.exe in $src" }
+if (!(Test-Path (Join-Path $src 'browser-manager.exe')))  { throw "Missing browser-manager.exe in $src" }
 if (!(Test-Path $icon))                                 { throw "Missing icon: $icon" }
 New-Item -ItemType Directory -Force -Path $publish      | Out-Null
 
@@ -39,7 +39,7 @@ New-Item -ItemType Directory -Force -Path $stage | Out-Null
 # 这比 Copy-Item *  + 后清理更可靠（避免 Z: 网络路径上 Get-ChildItem 慢的问题）。
 # ---------------------------------------------------------------------------
 $includeRoot = @(
-    'boost-browser.exe',
+    'browser-manager.exe',
     'app.ico',
     'app.png',
     'config.yaml',
@@ -153,7 +153,7 @@ Write-Host "[5/6] Generating .nsi script" -ForegroundColor Cyan
 $nsi = @"
 Unicode True
 !define PRODUCT_NAME "Browser Manager"
-!define PRODUCT_EXE "boost-browser.exe"
+!define PRODUCT_EXE "browser-manager.exe"
 !define PRODUCT_VERSION "1.2.0"
 !define UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\BrowserManager"
 !define APP_ICON "$icon"
@@ -212,7 +212,7 @@ retry_close:
   FileWrite `$9 "`$`$ErrorActionPreference = 'SilentlyContinue'`$\r`$\n"
   FileWrite `$9 "`$`$root = [IO.Path]::GetFullPath(`$`$InstallDir).TrimEnd('\\')`$\r`$\n"
   FileWrite `$9 "`$`$rootSlash = `$`$root + '\\'`$\r`$\n"
-  FileWrite `$9 "`$`$critical = @([IO.Path]::Combine(`$`$root, 'boost-browser.exe'))`$\r`$\n"
+  FileWrite `$9 "`$`$critical = @([IO.Path]::Combine(`$`$root, 'browser-manager.exe'))`$\r`$\n"
   FileWrite `$9 "Get-ChildItem -LiteralPath ([IO.Path]::Combine(`$`$root, 'chrome')) -Directory -ErrorAction SilentlyContinue | ForEach-Object { `$`$critical += [IO.Path]::Combine(`$`$_.FullName, 'chrome.exe'); `$`$critical += [IO.Path]::Combine(`$`$_.FullName, 'chrome.dll') }`$\r`$\n"
   FileWrite `$9 "for (`$`$round = 0; `$`$round -lt 5; `$`$round++) {`$\r`$\n"
   FileWrite `$9 "  `$`$procs = Get-CimInstance Win32_Process | Where-Object { `$`$_.ExecutablePath -and ([IO.Path]::GetFullPath(`$`$_.ExecutablePath).StartsWith(`$`$rootSlash, [StringComparison]::OrdinalIgnoreCase)) }`$\r`$\n"

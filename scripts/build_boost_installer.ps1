@@ -12,7 +12,7 @@ $sidebarBmp = Join-Path $project 'publish\boost_sidebar.bmp'
 $headerBmp = Join-Path $project 'publish\boost_header.bmp'
 
 if (!(Test-Path $src)) { throw "Missing source dir: $src" }
-if (!(Test-Path (Join-Path $src 'boost-browser.exe'))) { throw "Missing boost-browser.exe in $src" }
+if (!(Test-Path (Join-Path $src 'browser-manager.exe'))) { throw "Missing browser-manager.exe in $src" }
 New-Item -ItemType Directory -Force -Path $publish | Out-Null
 Remove-Item -Recurse -Force $stage -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force -Path $stage | Out-Null
@@ -106,7 +106,7 @@ Set-Content -Path $filesPath -Value $out -Encoding Unicode
 $nsi = @"
 Unicode True
 !define PRODUCT_NAME "Browser Manager"
-!define PRODUCT_EXE "boost-browser.exe"
+!define PRODUCT_EXE "browser-manager.exe"
 !define PRODUCT_VERSION "1.1.0"
 !define UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\BrowserManager"
 !define APP_ICON "$icon"
@@ -172,7 +172,7 @@ retry_close:
   FileWrite `$9 "`$`$ErrorActionPreference = 'SilentlyContinue'`$\r`$`n"
   FileWrite `$9 "`$`$installRoot = [IO.Path]::GetFullPath(`$`$InstallDir).TrimEnd('\\\\')`$\r`$`n"
   FileWrite `$9 "`$`$installRootSlash = `$`$installRoot + '\\\\'`$\r`$`n"
-  FileWrite `$9 "`$`$critical = @([IO.Path]::Combine(`$`$installRoot, 'boost-browser.exe'), [IO.Path]::Combine(`$`$installRoot, 'chrome', '144', 'chrome.exe'), [IO.Path]::Combine(`$`$installRoot, 'chrome', '144', 'chrome.dll'))`$\r`$`n"
+  FileWrite `$9 "`$`$critical = @([IO.Path]::Combine(`$`$installRoot, 'browser-manager.exe'), [IO.Path]::Combine(`$`$installRoot, 'chrome', '144', 'chrome.exe'), [IO.Path]::Combine(`$`$installRoot, 'chrome', '144', 'chrome.dll'))`$\r`$`n"
   ; Phase 1: Kill all processes whose EXE path starts with the install dir (3 rounds).
   ; This catches chrome/renderer/gpu broker child processes that taskkill /IM may miss.
   FileWrite `$9 "for (`$`$round = 0; `$`$round -lt 5; `$`$round++) {`$\r`$`n"
@@ -183,7 +183,7 @@ retry_close:
   FileWrite `$9 "}`$\r`$`n"
   ; Phase 2: Also kill by known exe names as a safety net (in case some spawned
   ; from the dir but WMI path detection missed them).
-  FileWrite `$9 "`$`$names = @('boost-browser','chrome','xray','sing-box')`$\r`$`n"
+  FileWrite `$9 "`$`$names = @('browser-manager','chrome','xray','sing-box')`$\r`$`n"
   FileWrite `$9 "foreach (`$`$nm in `$`$names) {`$\r`$`n"
   FileWrite `$9 "  `$`$procs = Get-Process -Name `$`$nm -ErrorAction SilentlyContinue | Where-Object { `$`$_.Path -and `$`$_.Path.StartsWith(`$`$installRootSlash, [StringComparison]::OrdinalIgnoreCase) }`$\r`$`n"
   FileWrite `$9 "  foreach (`$`$p in `$`$procs) { try { Stop-Process -Id `$`$p.Id -Force -ErrorAction SilentlyContinue } catch {} }`$\r`$`n"
