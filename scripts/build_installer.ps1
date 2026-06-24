@@ -3,7 +3,7 @@
 #
 # 与 build_release.ps1（升级用 38MB 主程序）配合使用：
 #   - build_release.ps1   产出 boost-browser.exe / .sha256 / updater.exe（自动升级链路）
-#   - build_installer.ps1 产出 BoostBrowser-Setup-vX.X.X.exe（新用户首次安装，含完整 chromium 内核）
+#   - build_installer.ps1 产出 BrowserManager-Setup-vX.X.X.exe（新用户首次安装，含完整 chromium 内核）
 #
 # 用法：
 #   1. 先跑 build_release.ps1 生成最新 boost-browser.exe + updater.exe
@@ -25,22 +25,22 @@ Write-Host "==> 当前版本: v$Version" -ForegroundColor Cyan
 $ReleaseDir   = "$RepoRoot\build\release"
 $BoostExe     = "$ReleaseDir\boost-browser.exe"
 $UpdaterExe   = "$ReleaseDir\updater.exe"
-$Stage        = "C:\Temp\BoostBrowser_installer_staging"
+$Stage        = "C:\Temp\BrowserManager_installer_staging"
 $Publish      = "$RepoRoot\publish\output"
-$NsiPath      = "$RepoRoot\publish\boost-browser-installer.nsi"
+$NsiPath      = "$RepoRoot\publish\browser-manager-installer.nsi"
 $NshPath      = "$RepoRoot\publish\boost_nsis_files.nsh"
-$OutExe       = "$ReleaseDir\BoostBrowser-Setup-v$Version.exe"
+$OutExe       = "$ReleaseDir\BrowserManager-Setup-v$Version.exe"
 $Icon         = "$RepoRoot\build\windows\icon.ico"
 $SidebarBmp   = "$RepoRoot\publish\boost_sidebar.bmp"
 $HeaderBmp    = "$RepoRoot\publish\boost_header.bmp"
 
 # Chrome 内核源（复用 cloak_test 已部署的，不重新下载）
-$CloakKernelSrc  = 'Z:\BoostBrowser_v110_test\chrome\cloak-146.0.7680.177'
-$GoogleKernelSrc = 'Z:\BoostBrowser_v110_test\chrome\google-148.0.7778.167'
-$BinSrc          = 'Z:\BoostBrowser_v110_test\bin'             # xray / sing-box
+$CloakKernelSrc  = 'Z:\BrowserManager_v110_test\chrome\cloak-146.0.7680.177'
+$GoogleKernelSrc = 'Z:\BrowserManager_v110_test\chrome\google-148.0.7778.167'
+$BinSrc          = 'Z:\BrowserManager_v110_test\bin'             # xray / sing-box
 $ConfigSrc       = "$RepoRoot\config.yaml"                     # 用仓库内干净的 config（不含 extensions、默认 cloak-146）
-$AppIconSrc      = 'Z:\BoostBrowser_v110_test\app.ico'
-$AppPngSrc       = 'Z:\BoostBrowser_v110_test\app.png'
+$AppIconSrc      = 'Z:\BrowserManager_v110_test\app.ico'
+$AppPngSrc       = 'Z:\BrowserManager_v110_test\app.png'
 
 # 3. 前置校验
 if (-not (Test-Path $BoostExe))        { throw "缺少 $BoostExe，请先运行 build_release.ps1" }
@@ -159,7 +159,7 @@ Unicode True
 !define PRODUCT_NAME "Boost Browser"
 !define PRODUCT_EXE "boost-browser.exe"
 !define PRODUCT_VERSION "$Version"
-!define UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\BoostBrowser"
+!define UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\BrowserManager"
 !define APP_ICON "$Icon"
 !define SIDEBAR_BMP "$SidebarBmp"
 !define HEADER_BMP "$HeaderBmp"
@@ -315,5 +315,5 @@ Get-ChildItem $ReleaseDir | Sort-Object Name | ForEach-Object {
 }
 Write-Host ""
 Write-Host "用户使用方式：" -ForegroundColor Yellow
-Write-Host "  - 新用户首次安装：下载 BoostBrowser-Setup-v$Version.exe 双击安装"
+Write-Host "  - 新用户首次安装：下载 BrowserManager-Setup-v$Version.exe 双击安装"
 Write-Host "  - 老用户自动升级：app 启动后 5s 自动检查，弹窗下载 boost-browser.exe（38MB）"

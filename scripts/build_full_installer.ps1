@@ -5,7 +5,7 @@
 # 与 build_release.ps1（薄安装包，~17MB，仅 wails app + updater）独立，
 # 不互相覆盖，输出到 build\release\Boost-Browser-Setup-Full-v<ver>.exe。
 #
-# 内容（对齐老 BoostBrowser_cloak_Setup.exe 425MB 的功能集）：
+# 内容（对齐老 BrowserManager_cloak_Setup.exe 425MB 的功能集）：
 #   - boost-browser.exe          ← 刚 wails build 出来的最新版
 #   - updater.exe                ← 刚 go build 出来的最新版
 #   - chrome\cloak-146.0.7680.177\ ← cloak chromium 内核（默认）
@@ -17,17 +17,17 @@
 #   powershell -ExecutionPolicy Bypass -File scripts\build_full_installer.ps1
 #   可选参数:
 #     -SkipBuild        跳过 wails+go 编译，直接用 build\release\ 现有产物
-#     -KernelSrc <dir>  覆盖 chromium 内核源（默认 Z:\BoostBrowser_v110_test）
+#     -KernelSrc <dir>  覆盖 chromium 内核源（默认 Z:\BrowserManager_v110_test）
 
 # 配置（用环境变量覆盖，避免 param block 在某些 PowerShell 版本下的怪异行为）
 #   $env:BOOST_SKIP_BUILD = '1'    跳过 wails+go 编译，直接复用 build\release\
 #   $env:BOOST_KERNEL_SRC = 'D:\xxx'  覆盖 chromium 内核源
 $SkipBuild = ($env:BOOST_SKIP_BUILD -eq '1')
-$KernelSrc = if ($env:BOOST_KERNEL_SRC) { $env:BOOST_KERNEL_SRC } else { 'Z:\BoostBrowser_v110_test' }
+$KernelSrc = if ($env:BOOST_KERNEL_SRC) { $env:BOOST_KERNEL_SRC } else { 'Z:\BrowserManager_v110_test' }
 
 $RepoRoot   = Split-Path -Parent $PSScriptRoot
 $ReleaseDir = Join-Path $RepoRoot 'build\release'
-$Stage      = 'C:\Temp\BoostBrowser_full_staging'
+$Stage      = 'C:\Temp\BrowserManager_full_staging'
 $NshPath    = Join-Path $RepoRoot 'build\release\full_installer_files.nsh'
 $NsiPath    = Join-Path $RepoRoot 'build\release\full_installer.nsi'
 $Icon       = Join-Path $RepoRoot 'build\windows\icon.ico'
@@ -187,7 +187,7 @@ Unicode True
 !define PRODUCT_NAME "Boost Browser"
 !define PRODUCT_EXE "boost-browser.exe"
 !define PRODUCT_VERSION "$Version"
-!define UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\BoostBrowser"
+!define UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\BrowserManager"
 !define APP_ICON "$Icon"
 !define SIDEBAR_BMP "$SidebarBmp"
 !define HEADER_BMP "$HeaderBmp"
@@ -399,7 +399,7 @@ Write-Host "STAGE  = $Stage"
 Write-Host ("FILES  = {0}" -f (Get-ChildItem $Stage -Recurse -File).Count)
 Write-Host ""
 Write-Host "对比老版安装包:" -ForegroundColor Cyan
-$oldExe = 'Z:\BoostBrowser_cloak_Setup.exe'
+$oldExe = 'Z:\BrowserManager_cloak_Setup.exe'
 if (Test-Path $oldExe) {
     $oldSize = (Get-Item $oldExe).Length
     Write-Host ("  老 cloak 安装包 = {0:N1} MB" -f ($oldSize / 1MB))

@@ -5,13 +5,13 @@
 !include "FileFunc.nsh"
 
 !ifndef INFO_PROJECTNAME
-    !define INFO_PROJECTNAME "Boost Browser"
+    !define INFO_PROJECTNAME "Browser Manager"
 !endif
 !ifndef INFO_COMPANYNAME
-    !define INFO_COMPANYNAME "Boost Browser"
+    !define INFO_COMPANYNAME "Browser Manager"
 !endif
 !ifndef INFO_PRODUCTNAME
-    !define INFO_PRODUCTNAME "Boost Browser"
+    !define INFO_PRODUCTNAME "Browser Manager"
 !endif
 !ifndef INFO_PRODUCTVERSION
     !define INFO_PRODUCTVERSION "1.4.5"

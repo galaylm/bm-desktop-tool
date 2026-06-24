@@ -73,7 +73,7 @@ FAQ：
 
 ### `build.bat`
 
-构建 `build\bin\boost-browser.exe`。
+构建 `build\bin\browser-manager.exe`。
 
 ```bat
 bat\build.bat
@@ -131,7 +131,7 @@ Windows 分支使用的项目路径：
 
 ```text
 输入：
-- build\bin\boost-browser.exe
+- build\bin\browser-manager.exe
 - publish\config.init.yaml
 - bin\xray.exe
 - bin\sing-box.exe
@@ -140,7 +140,7 @@ Windows 分支使用的项目路径：
 - publish\staging\
 
 输出：
-- publish\output\AntBrowser-Setup-<version>.exe
+- publish\output\BrowserManager-Setup-<version>.exe
 ```
 
 说明：
@@ -152,8 +152,8 @@ Windows 分支使用的项目路径：
 Linux 分支会通过 Docker Desktop 调用：
 
 ```text
-docker build -f publish/linux/linux-builder.Dockerfile -t ant-browser-linux-builder:local publish/linux
-docker run --rm -v <repo>:/workspace -w /workspace ant-browser-linux-builder:local ^
+docker build -f publish/linux/linux-builder.Dockerfile -t browser-manager-linux-builder:local publish/linux
+docker run --rm -v <repo>:/workspace -w /workspace browser-manager-linux-builder:local ^
   bash -c "bash publish/linux/publish-linux.sh --arch <Docker当前架构>"
 ```
 
@@ -175,7 +175,7 @@ CI=1        -> 同样不 pause
 Windows 产物：
 
 ```text
-publish\output\AntBrowser-Setup-<version>.exe
+publish\output\BrowserManager-Setup-<version>.exe
 ```
 
 ### `recover-profiles.ps1`
@@ -185,19 +185,19 @@ publish\output\AntBrowser-Setup-<version>.exe
 默认只预览，不写数据库：
 
 ```powershell
-pwsh -File bat/recover-profiles.ps1 -AppRoot 'E:\software\Boost Browser'
+pwsh -File bat/recover-profiles.ps1 -AppRoot 'E:\software\Browser Manager'
 ```
 
 确认结果后再写回 `app.db`：
 
 ```powershell
-pwsh -File bat/recover-profiles.ps1 -AppRoot 'E:\software\Boost Browser' -Apply
+pwsh -File bat/recover-profiles.ps1 -AppRoot 'E:\software\Browser Manager' -Apply
 ```
 
 如果旧目录来自备份恢复，且怀疑存在跨内核残留状态，可同时为“风险目录”创建一份 `__repair_时间戳` 副本，再将新配置指向副本：
 
 ```powershell
-pwsh -File bat/recover-profiles.ps1 -AppRoot 'E:\software\Boost Browser' -Apply -RepairRisky
+pwsh -File bat/recover-profiles.ps1 -AppRoot 'E:\software\Browser Manager' -Apply -RepairRisky
 ```
 
 说明：
@@ -205,7 +205,7 @@ pwsh -File bat/recover-profiles.ps1 -AppRoot 'E:\software\Boost Browser' -Apply 
 - 脚本会调用 `go run ./backend/cmd/profile-recover`
 - `-Apply` 模式会先在 `data\recovery-backups\` 下备份当前数据库文件
 - 默认不会删除旧目录，也不会主动清理登录态文件
-- 运行 `-Apply` 前应先关闭 Boost Browser，避免并发写库
+- 运行 `-Apply` 前应先关闭 Browser Manager，避免并发写库
 
 ## 备注
 

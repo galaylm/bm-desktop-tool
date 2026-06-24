@@ -3,10 +3,10 @@ $ErrorActionPreference = 'Stop'
 $project = 'C:\Users\Administrator\Desktop\Ant-Browser-master'
 $src = Join-Path $project 'build\bin'
 $publish = Join-Path $project 'publish\output'
-$stage = 'C:\Temp\BoostBrowser_installer_staging'
-$nsiPath = Join-Path $project 'publish\boost-browser-installer.nsi'
+$stage = 'C:\Temp\BrowserManager_installer_staging'
+$nsiPath = Join-Path $project 'publish\browser-manager-installer.nsi'
 $filesPath = Join-Path $project 'publish\boost_nsis_files.nsh'
-$outExe = Join-Path $publish 'BoostBrowser-Setup-1.1.0.exe'
+$outExe = Join-Path $publish 'BrowserManager-Setup-1.1.0.exe'
 $icon = Join-Path $project 'build\windows\icon.ico'
 $sidebarBmp = Join-Path $project 'publish\boost_sidebar.bmp'
 $headerBmp = Join-Path $project 'publish\boost_header.bmp'
@@ -61,7 +61,7 @@ function New-GradientBitmap([string]$Path, [int]$Width, [int]$Height, [bool]$Hea
     $muted = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(175, 205, 235))
     if ($Header) {
         $font = New-Object System.Drawing.Font 'Segoe UI', 10, ([System.Drawing.FontStyle]::Bold)
-        $g.DrawString('Boost Browser', $font, $white, 12, 7)
+        $g.DrawString('Browser Manager', $font, $white, 12, 7)
         $font2 = New-Object System.Drawing.Font 'Segoe UI', 7
         $g.DrawString('Chrome 144 kernel ready', $font2, $muted, 12, 29)
         $g.FillEllipse($accent, $Width-44, 10, 24, 24)
@@ -105,10 +105,10 @@ Set-Content -Path $filesPath -Value $out -Encoding Unicode
 
 $nsi = @"
 Unicode True
-!define PRODUCT_NAME "Boost Browser"
+!define PRODUCT_NAME "Browser Manager"
 !define PRODUCT_EXE "boost-browser.exe"
 !define PRODUCT_VERSION "1.1.0"
-!define UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\BoostBrowser"
+!define UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\BrowserManager"
 !define APP_ICON "$icon"
 !define SIDEBAR_BMP "$sidebarBmp"
 !define HEADER_BMP "$headerBmp"
@@ -118,7 +118,7 @@ Unicode True
 
 Name "`${PRODUCT_NAME} `${PRODUCT_VERSION}"
 OutFile "$outExe"
-InstallDir "`$LOCALAPPDATA\Programs\Boost Browser"
+InstallDir "`$LOCALAPPDATA\Programs\Browser Manager"
 InstallDirRegKey HKCU "`${UNINSTALL_KEY}" "InstallLocation"
 RequestExecutionLevel user
 SetCompressor zlib
@@ -132,14 +132,14 @@ UninstallIcon "`${APP_ICON}"
 !define MUI_HEADERIMAGE_UNBITMAP "`${HEADER_BMP}"
 !define MUI_ABORTWARNING
 
-!define MUI_WELCOMEPAGE_TITLE "Welcome to Boost Browser"
-!define MUI_WELCOMEPAGE_TEXT "Boost Browser includes the full runtime package and is ready to use after installation. Default browser kernel: Chrome 144. Includes the app, Chromium kernel, xray / sing-box, config templates, and sync features. Follow @ferdie_jhovie on X/Twitter for updates."
+!define MUI_WELCOMEPAGE_TITLE "Welcome to Browser Manager"
+!define MUI_WELCOMEPAGE_TEXT "Browser Manager includes the full runtime package and is ready to use after installation. Default browser kernel: Chrome 144. Includes the app, Chromium kernel, xray / sing-box, config templates, and sync features. Follow @ferdie_jhovie on X/Twitter for updates."
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_RUN "`$INSTDIR\`${PRODUCT_EXE}"
-!define MUI_FINISHPAGE_RUN_TEXT "Launch Boost Browser"
-!define MUI_FINISHPAGE_TITLE "Boost Browser Setup Complete"
+!define MUI_FINISHPAGE_RUN_TEXT "Launch Browser Manager"
+!define MUI_FINISHPAGE_TITLE "Browser Manager Setup Complete"
 !define MUI_FINISHPAGE_TEXT "Installation complete. Default kernel is Chrome 144. Single-instance protection is enabled."
 !define MUI_FINISHPAGE_LINK "关注 @ferdie_jhovie"
 !define MUI_FINISHPAGE_LINK_LOCATION "https://x.com/ferdie_jhovie"
@@ -200,7 +200,7 @@ retry_close:
   Delete "`$TEMP\boost_install_unlock.ps1"
 
   `${If} `$0 != 0
-    MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "Boost Browser or bundled Chrome is still running. Please close all Boost Browser windows, browser pages, and wallet popups, then click Retry." IDRETRY retry_close IDCANCEL abort_install
+    MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "Browser Manager or bundled Chrome is still running. Please close all Browser Manager windows, browser pages, and wallet popups, then click Retry." IDRETRY retry_close IDCANCEL abort_install
   `${EndIf}
   Sleep 300
   Goto done
@@ -210,7 +210,7 @@ abort_install:
 done:
 FunctionEnd
 
-Section "Boost Browser" SecMain
+Section "Browser Manager" SecMain
   SectionIn RO
   Call CloseBoostProcesses
   SetOutPath "`$INSTDIR"
@@ -225,7 +225,7 @@ Section "Boost Browser" SecMain
 
   WriteRegStr HKCU "`${UNINSTALL_KEY}" "DisplayName" "`${PRODUCT_NAME}"
   WriteRegStr HKCU "`${UNINSTALL_KEY}" "DisplayVersion" "`${PRODUCT_VERSION}"
-  WriteRegStr HKCU "`${UNINSTALL_KEY}" "Publisher" "Boost Browser"
+  WriteRegStr HKCU "`${UNINSTALL_KEY}" "Publisher" "Browser Manager"
   WriteRegStr HKCU "`${UNINSTALL_KEY}" "InstallLocation" "`$INSTDIR"
   WriteRegStr HKCU "`${UNINSTALL_KEY}" "UninstallString" "`$INSTDIR\Uninstall.exe"
   WriteRegStr HKCU "`${UNINSTALL_KEY}" "DisplayIcon" "`$INSTDIR\`${PRODUCT_EXE}"
