@@ -43,6 +43,18 @@ var globalSerializedWindowWatchersOnce sync.Once
 // version was stable when each watcher ran alone, but could trigger watchdog
 // restarts when both global loops were active concurrently. Keep both behaviors,
 // but serialize their window enumeration/mutation to avoid cross-loop races.
+
+var stopGlobalWatchers_extension = make(chan struct{})
+
+func StopGlobalExtensionWatchers() {
+	select {
+	case <-stopGlobalWatchers_extension:
+		// already stopped
+	default:
+		close(stopGlobalWatchers_extension)
+	}
+}
+
 func StartGlobalSerializedWindowWatchers(appRoot string) {
 	root := normalizeWindowsPath(appRoot)
 	if root == "" {
@@ -59,9 +71,14 @@ func StartGlobalSerializedWindowWatchers(appRoot string) {
 			}()
 			ticker := time.NewTicker(500 * time.Millisecond)
 			defer ticker.Stop()
-			for range ticker.C {
-				clampExtensionPopupWindowsForAppRoot(root)
-				restoreOffscreenServiceWorkerDevToolsWindowsForAppRoot(root)
+			for {
+				select {
+				case <-ticker.C:
+					clampExtensionPopupWindowsForAppRoot(root)
+					restoreOffscreenServiceWorkerDevToolsWindowsForAppRoot(root)
+				case <-stopGlobalWatchers_extension:
+					return
+				}
 			}
 		}()
 	})
@@ -90,8 +107,13 @@ func StartGlobalExtensionPopupSizer(appRoot string) {
 			}()
 			ticker := time.NewTicker(500 * time.Millisecond)
 			defer ticker.Stop()
-			for range ticker.C {
-				clampExtensionPopupWindowsForAppRoot(root)
+			for {
+				select {
+				case <-ticker.C:
+					clampExtensionPopupWindowsForAppRoot(root)
+				case <-stopGlobalWatchers_extension:
+					return
+				}
 			}
 		}()
 	})
@@ -119,8 +141,13 @@ func StartGlobalServiceWorkerDevToolsRestorer(appRoot string) {
 			}()
 			ticker := time.NewTicker(300 * time.Millisecond)
 			defer ticker.Stop()
-			for range ticker.C {
-				restoreOffscreenServiceWorkerDevToolsWindowsForAppRoot(root)
+			for {
+				select {
+				case <-ticker.C:
+					restoreOffscreenServiceWorkerDevToolsWindowsForAppRoot(root)
+				case <-stopGlobalWatchers_extension:
+					return
+				}
 			}
 		}()
 	})
@@ -158,6 +185,8 @@ func startExtensionPopupSizer(pid int) {
 			}
 			if fastPhase {
 				select {
+				case <-stopGlobalWatchers_extension:
+					return
 				case <-fastTicker.C:
 					func() {
 						defer func() {

@@ -1,11 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
 	"sort"
-	"strings"
 	"sync"
 	"time"
 )
@@ -242,8 +242,7 @@ func (a *App) loadAutoCleanConfig() *AutoCacheCleanConfig {
 		return cfg
 	}
 
-	// 简单 JSON 解析，不引入额外依赖
-	_ = parseSimpleJSON(string(data), cfg)
+	json.Unmarshal(data, cfg)
 	return cfg
 }
 
@@ -252,40 +251,8 @@ func (a *App) saveAutoCleanConfig(cfg AutoCacheCleanConfig) {
 	dir := filepath.Dir(autoCleanCfgPath)
 	_ = os.MkdirAll(dir, 0755)
 
-	jsonStr := fmt.Sprintf(`{
-  "enabled": %t,
-  "intervalDays": %d,
-  "lastCleanAt": "%s"
-}`, cfg.Enabled, cfg.IntervalDays, cfg.LastCleanAt)
-
-	_ = os.WriteFile(autoCleanCfgPath, []byte(jsonStr), 0644)
+	data, _ := json.MarshalIndent(cfg, "", "  ")
+	_ = os.WriteFile(autoCleanCfgPath, data, 0644)
 }
 
-// parseSimpleJSON 简单 JSON 解析器，用于读取 auto_cache_clean.json
-func parseSimpleJSON(data string, cfg *AutoCacheCleanConfig) error {
-	lines := strings.Split(data, "\n")
-	for _, line := range lines {
-		line = strings.TrimSpace(line)
-		if strings.HasPrefix(line, "\"enabled\":") {
-			parts := strings.SplitN(line, ":", 2)
-			if len(parts) == 2 {
-				val := strings.TrimRight(strings.TrimSpace(parts[1]), ",")
-				cfg.Enabled = val == "true"
-			}
-		} else if strings.HasPrefix(line, "\"intervalDays\":") {
-			parts := strings.SplitN(line, ":", 2)
-			if len(parts) == 2 {
-				val := strings.TrimRight(strings.TrimSpace(parts[1]), ",")
-				fmt.Sscanf(val, "%d", &cfg.IntervalDays)
-			}
-		} else if strings.HasPrefix(line, "\"lastCleanAt\":") {
-			parts := strings.SplitN(line, ":", 2)
-			if len(parts) == 2 {
-				val := strings.TrimSpace(parts[1])
-				val = strings.Trim(val, "\" ,")
-				cfg.LastCleanAt = val
-			}
-		}
-	}
-	return nil
-}
+

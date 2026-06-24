@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Save, RotateCcw, Upload, Download, RefreshCw, Trash2, HardDrive } from 'lucide-react'
 import { Card, Button, FormItem, Input, Select, Switch, ThemeSwitcher, toast, Modal, Progress } from '../../shared/components'
-import { fetchSettings, saveSettings, resetSettings, initializeSystemData, exportSystemConfig, importSystemConfig, getCacheInfo, cleanAllBrowserCache } from './api'
+import { fetchSettings, saveSettings, resetSettings, initializeSystemData, exportSystemConfig, importSystemConfig, getCacheInfo, cleanAllBrowserCache, saveAutoCacheCleanConfig } from './api'
 import type { AppSettings, CacheInfo, CacheCleanResult } from './types'
 import { defaultSettings } from './types'
 import { EventsOn, EventsOff } from '../../wailsjs/runtime/runtime'
@@ -184,6 +184,14 @@ export function SettingsPage() {
   const handleChange = <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => {
     setSettings(prev => ({ ...prev, [key]: value }))
     setHasChanges(true)
+    // Sync auto-clean settings to backend immediately (not inside setSettings updater)
+    if (key === 'autoCleanCache' || key === 'autoCleanIntervalDays') {
+      saveAutoCacheCleanConfig({
+        enabled: key === 'autoCleanCache' ? (value as boolean) : settings.autoCleanCache,
+        intervalDays: key === 'autoCleanIntervalDays' ? (value as number) : settings.autoCleanIntervalDays,
+        lastCleanAt: '',
+      }).catch(() => {})
+    }
   }
 
   const handleSave = async () => {
