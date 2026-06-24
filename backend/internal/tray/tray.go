@@ -27,8 +27,8 @@ func Run(cb Callbacks) {
 
 	systray.Run(func() {
 		systray.SetIcon(iconData)
-		systray.SetTitle("Boost Browser")
-		systray.SetTooltip("Boost Browser")
+		systray.SetTitle("Browser Manager")
+		systray.SetTooltip("Browser Manager")
 
 		mShow := systray.AddMenuItem("显示窗口", "显示主窗口")
 		systray.AddSeparator()

@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-const importedCookieSeedFileName = ".boost-browser-import-cookies.json"
+const importedCookieSeedFileName = ".bm-import-cookies.json"
 
 type importedCookieSeed struct {
 	Cookies []importedCookieSeedEntry `json:"cookies"`

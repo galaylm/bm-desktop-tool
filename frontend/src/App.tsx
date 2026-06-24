@@ -46,7 +46,7 @@ const AutomationPage = lazyNamed(() => import('./modules/browser/pages/Automatio
 const UsageTutorialPage = lazyNamed(() => import('./modules/browser/pages/UsageTutorialPage'), 'UsageTutorialPage')
 const QuickLaunchModal = lazyNamed(() => import('./modules/browser/components/QuickLaunchModal'), 'QuickLaunchModal')
 
-const MAIN_WINDOW_BOUNDS_STORAGE_KEY = 'boost:main-window-bounds:v1'
+const MAIN_WINDOW_BOUNDS_STORAGE_KEY = 'bm:main-window-bounds:v1'
 
 type SavedMainWindowBounds = {
   x: number

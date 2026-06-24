@@ -776,7 +776,7 @@ function normalizeLaunchServerInfo(payload: any): LaunchServerInfo {
     requested: !!apiAuthPayload?.requested,
     configured: !!apiAuthPayload?.configured,
     enabled: !!apiAuthPayload?.enabled,
-    header: String(apiAuthPayload?.header || 'X-Boost-Api-Key'),
+    header: String(apiAuthPayload?.header || 'X-BM-Api-Key'),
   }
 
   return {
@@ -814,7 +814,7 @@ export async function fetchLaunchServerInfo(): Promise<LaunchServerInfo> {
       requested: false,
       configured: false,
       enabled: false,
-      header: 'X-Boost-Api-Key',
+      header: 'X-BM-Api-Key',
     },
   }
 }

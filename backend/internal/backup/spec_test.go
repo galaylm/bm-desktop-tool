@@ -97,12 +97,12 @@ func TestBuildManifest_StripsSourcePath(t *testing.T) {
 	}
 
 	at := time.Date(2026, 3, 2, 12, 0, 0, 0, time.UTC)
-	manifest := BuildManifest(scope, "Boost Browser", "1.1.0", at)
+	manifest := BuildManifest(scope, "Browser Manager", "1.1.0", at)
 
 	if manifest.CreatedAt != "2026-03-02T12:00:00Z" {
 		t.Fatalf("CreatedAt 不匹配: %s", manifest.CreatedAt)
 	}
-	if manifest.App.Name != "Boost Browser" {
+	if manifest.App.Name != "Browser Manager" {
 		t.Fatalf("manifest app name 不正确: %s", manifest.App.Name)
 	}
 	if manifest.App.Version != "1.1.0" {

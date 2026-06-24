@@ -16,7 +16,7 @@ const (
 	GithubStarProfileBonus          = 50
 	GithubStarProfileTotal          = DefaultMaxProfileLimit + GithubStarProfileBonus
 	DefaultLaunchServerPort         = 19876
-	DefaultLaunchServerAPIKeyHeader = "X-Boost-Api-Key"
+	DefaultLaunchServerAPIKeyHeader = "X-BM-Api-Key"
 )
 
 // RewardForUsedKey 返回指定兑换记录对应的永久额度奖励。
@@ -392,7 +392,7 @@ func DefaultConfig() *Config {
 			},
 		},
 		App: AppConfig{
-			Name: "Boost Browser",
+			Name: "Browser Manager",
 			Window: WindowConfig{
 				Width:     1750,
 				Height:    1000,

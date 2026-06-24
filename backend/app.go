@@ -78,7 +78,7 @@ func (a *App) appName() string {
 			return name
 		}
 	}
-	return "Boost Browser"
+	return "Browser Manager"
 }
 
 func (a *App) appVersion() string {

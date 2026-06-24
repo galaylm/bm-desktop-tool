@@ -1,13 +1,11 @@
 /**
  * 项目配置文件
- * 
- * 基于此脚手架创建新项目时，修改此文件即可完成定制
  */
 
 // 项目基础信息
 export const projectConfig = {
-  name: 'Boost Browser',
-  shortName: 'Boost',
+  name: 'Browser Manager',
+  shortName: 'BM',
   description: '面向多账号隔离、代理绑定和本地环境管理的桌面浏览器工具',
   primaryColor: 'primary',
 }

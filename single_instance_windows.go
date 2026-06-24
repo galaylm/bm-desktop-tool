@@ -84,7 +84,7 @@ func releaseSyncPanelLock() {
 // focusExistingMainWindow is only used when a second boost-browser.exe is launched.
 // It activates the already-running Wails main window. Browser profile windows are not limited.
 func focusExistingMainWindow() bool {
-	return focusExistingWindowByKeywords([]string{"Boost Browser", "Ant Browser", "boost-browser"})
+	return focusExistingWindowByKeywords([]string{"Browser Manager", "Ant Browser", "boost-browser"})
 }
 
 func focusExistingSyncPanelWindow() bool {

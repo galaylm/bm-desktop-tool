@@ -15,7 +15,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
-const mainWindowBoundsStorageKey = "boost:main-window-bounds:v1"
+const mainWindowBoundsStorageKey = "bm:main-window-bounds:v1"
 
 type MainWindowBounds struct {
 	X      int `json:"x"`

@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-const DefaultAPIKeyHeader = "X-Boost-Api-Key"
+const DefaultAPIKeyHeader = "X-BM-Api-Key"
 
 // APIAuthConfig 定义 LaunchServer 对 /api/* 请求的可选认证配置。
 type APIAuthConfig struct {

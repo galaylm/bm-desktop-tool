@@ -25,11 +25,11 @@ import (
 // 发版流程（你只需做这件事）：
 //   1. 升 wails.json 里 productVersion，比如 1.1.0 → 1.1.1
 //   2. wails build -clean -platform windows/amd64
-//   3. 计算 sha256: certutil -hashfile boost-browser.exe SHA256
+//   3. 计算 sha256: certutil -hashfile browser-manager.exe SHA256
 //   4. 在 GitHub 上 Create new release，tag 填 v1.1.1
 //   5. 上传两个文件作为 release assets：
-//        - boost-browser.exe              (主程序)
-//        - boost-browser.exe.sha256       (纯文本，里面就一行 sha256 hash)
+//        - browser-manager.exe              (主程序)
+//        - browser-manager.exe.sha256       (纯文本，里面就一行 sha256 hash)
 //   6. Publish release，结束
 //
 // 客户端流程（自动）：
@@ -112,18 +112,18 @@ func (a *App) CheckUpdate() (*UpdateCheckResult, error) {
 	var exeSize int64
 	for _, asset := range rel.Assets {
 		switch asset.Name {
-		case "boost-browser.exe":
+		case "browser-manager.exe":
 			exeURL = asset.BrowserDownloadURL
 			exeSize = asset.Size
-		case "boost-browser.exe.sha256":
+		case "browser-manager.exe.sha256":
 			sha256URL = asset.BrowserDownloadURL
 		}
 	}
 	if exeURL == "" {
-		return nil, fmt.Errorf("release %s 缺少 boost-browser.exe asset", rel.TagName)
+		return nil, fmt.Errorf("release %s 缺少 browser-manager.exe asset", rel.TagName)
 	}
 	if sha256URL == "" {
-		return nil, fmt.Errorf("release %s 缺少 boost-browser.exe.sha256 asset", rel.TagName)
+		return nil, fmt.Errorf("release %s 缺少 browser-manager.exe.sha256 asset", rel.TagName)
 	}
 
 	// 拉 sha256 文件内容
@@ -177,7 +177,7 @@ func fetchLatestReleaseFromAPI(client *http.Client, apiURL string) (*ghRelease, 
 	}
 	req.Header.Set("Accept", "application/vnd.github+json")
 	req.Header.Set("X-GitHub-Api-Version", "2022-11-28")
-	req.Header.Set("User-Agent", "BoostBrowser-Updater/1.0")
+	req.Header.Set("User-Agent", "BrowserManager-Updater/1.0")
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -207,7 +207,7 @@ func fetchLatestReleaseFromRedirect(client *http.Client, latestPageURL string) (
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("User-Agent", "BoostBrowser-Updater/1.0")
+	req.Header.Set("User-Agent", "BrowserManager-Updater/1.0")
 
 	redirectClient := *client
 	redirectClient.CheckRedirect = func(req *http.Request, via []*http.Request) error {
@@ -243,8 +243,8 @@ func fetchLatestReleaseFromRedirect(client *http.Client, latestPageURL string) (
 	return &ghRelease{
 		TagName: tag,
 		Assets: []ghAsset{
-			{Name: "boost-browser.exe", BrowserDownloadURL: githubReleaseAssetURL(tag, "boost-browser.exe")},
-			{Name: "boost-browser.exe.sha256", BrowserDownloadURL: githubReleaseAssetURL(tag, "boost-browser.exe.sha256")},
+			{Name: "browser-manager.exe", BrowserDownloadURL: githubReleaseAssetURL(tag, "browser-manager.exe")},
+			{Name: "browser-manager.exe.sha256", BrowserDownloadURL: githubReleaseAssetURL(tag, "browser-manager.exe.sha256")},
 		},
 	}, nil
 }
@@ -292,7 +292,7 @@ func (a *App) DownloadUpdate(url, expectedSHA256 string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	req.Header.Set("User-Agent", "BoostBrowser-Updater/1.0")
+	req.Header.Set("User-Agent", "BrowserManager-Updater/1.0")
 
 	client := &http.Client{Timeout: 30 * time.Minute}
 	resp, err := client.Do(req)

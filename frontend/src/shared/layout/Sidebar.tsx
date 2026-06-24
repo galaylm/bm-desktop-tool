@@ -22,12 +22,9 @@ import {
 } from 'lucide-react'
 import clsx from 'clsx'
 import { useLayoutStore } from '../../store/layoutStore'
-import { projectConfig, navigationConfig } from '../../config'
+import { navigationConfig } from '../../config'
 import { OpenWindowSyncPanel } from '../../wailsjs/go/main/App'
 import { toast } from '../components'
-
-// 导入应用logo
-import logoImage from '../../resources/images/logo.png'
 
 const iconMap: Record<string, LucideIcon> = {
   LayoutDashboard,
@@ -69,47 +66,20 @@ export function Sidebar() {
       'bg-[var(--color-bg-surface)] flex flex-col transition-all duration-300 border-r border-[var(--color-border-default)]',
       sidebarCollapsed ? 'w-16' : 'w-60'
     )}>
-      {/* Logo */}
+      {/* Logo Area */}
       <div className={clsx(
         'h-14 flex items-center border-b border-[var(--color-border-muted)]',
         sidebarCollapsed ? 'justify-center px-2' : 'px-5'
       )}>
         {!sidebarCollapsed ? (
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 bg-[var(--color-accent)] flex items-center justify-center">
-              <img 
-                src={logoImage} 
-                alt="应用Logo" 
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  // 图片加载失败时显示首字母
-                  e.currentTarget.style.display = 'none';
-                  e.currentTarget.parentElement?.classList.add('fallback-logo');
-                }}
-              />
-              <span className="text-xs font-bold text-[var(--color-text-inverse)] hidden fallback-content">
-                {projectConfig.shortName.charAt(0)}
-              </span>
+            <div className="w-6 h-6 rounded flex-shrink-0 bg-[var(--color-accent)] flex items-center justify-center">
+              <span className="text-xs font-bold text-[var(--color-text-inverse)]">B</span>
             </div>
-            <h2 className="text-base font-semibold text-[var(--color-text-primary)] tracking-tight truncate">
-              {projectConfig.name}
-            </h2>
           </div>
         ) : (
-          <div className="w-8 h-8 rounded-full overflow-hidden bg-[var(--color-accent)] flex items-center justify-center">
-            <img 
-              src={logoImage} 
-              alt="应用Logo" 
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                // 图片加载失败时显示首字母
-                e.currentTarget.style.display = 'none';
-                e.currentTarget.parentElement?.classList.add('fallback-logo');
-              }}
-            />
-            <span className="text-xs font-bold text-[var(--color-text-inverse)] hidden fallback-content">
-              {projectConfig.shortName.charAt(0)}
-            </span>
+          <div className="w-8 h-8 rounded flex-shrink-0 bg-[var(--color-accent)] flex items-center justify-center">
+            <span className="text-xs font-bold text-[var(--color-text-inverse)]">B</span>
           </div>
         )}
       </div>

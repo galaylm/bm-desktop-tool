@@ -8,7 +8,7 @@ const DEFAULT_API_AUTH: LaunchServerInfo['apiAuth'] = {
   requested: false,
   configured: false,
   enabled: false,
-  header: 'X-Boost-Api-Key',
+  header: 'X-BM-Api-Key',
 }
 
 function buildAuthHeaderLine(apiAuth: LaunchServerInfo['apiAuth']): string {
