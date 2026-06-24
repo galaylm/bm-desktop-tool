@@ -1,179 +1,155 @@
 # Browser Manager
 
-> 面向多账号隔离、代理绑定和本地环境管理的桌面浏览器工具（Windows / Linux）。
+> A cross-platform desktop tool for managing multiple isolated browser instances, proxy binding, and local environment management.
 
-## 推荐内核项目
+---
 
-当前推荐配套使用的浏览器内核，来源于开源项目 [fingerprint-chromium](https://github.com/adryfish/fingerprint-chromium)。
+**English** · [中文](#浏览器管理器)
 
-如果你正在寻找可直接下载和维护的指纹内核版本，建议先查看它的 Releases 页面：
+---
 
-- <https://github.com/adryfish/fingerprint-chromium/releases>
+## Overview
 
-本项目目标：在一台桌面设备上，帮助用户稳定管理多个彼此隔离的浏览器实例，并配合代理池、浏览器内核和快捷启动能力完成日常运营或测试工作。
+Browser Manager is a powerful desktop application that allows you to create, manage, and run multiple isolated browser environments on a single machine. Each instance can have its own proxy configuration, browser fingerprint, and local storage — making it ideal for multi-account operations, social media management, e-commerce store operations, and isolated testing environments.
 
-## 目录
+## Key Features
 
-- [项目简介](#项目简介)
-- [近期更新](#近期更新)
-- [更新日志](CHANGELOG.md)
-- [核心特性](#核心特性)
-- [快速开始](#快速开始)
-- [常用操作](#常用操作)
-- [常见问题](#常见问题)
-- [Roadmap](#roadmap)
-- [License](#license)
+- **🧩 Instance Management** — Create, edit, clone, start, stop, and delete isolated browser instances with independent profiles
+- **🔌 Proxy Management** — Configure HTTP, HTTPS, SOCKS5 proxies per instance; support importing Clash subscription links and VMess/VLESS/Trojan/Shadowsocks protocols
+- **⚙️ Kernel Management** — Manage multiple Chrome kernel (fingerprint-chromium) versions simultaneously
+- **⚡ Quick Actions** — Launch instances instantly via custom short codes or `Ctrl + K` quick search
+- **🏷️ Tag & Filter** — Organize instances with tags, filter by keyword, and sort by status
+- **💾 Local-First** — All configuration and data stored locally; no cloud dependency, full privacy control
+- **🔄 Cloning** — Duplicate existing instances with all settings preserved
 
-## 项目简介
+## Recommended Kernel
 
-适合以下场景：
+This project recommends [**fingerprint-chromium**](https://github.com/adryfish/fingerprint-chromium) as the browser kernel for optimal fingerprinting and isolation support.
 
-- 多账号环境隔离
-- 跨境电商与社媒账号运营
-- 需要独立代理出口的本地测试
-- 需要统一管理浏览器内核和实例配置的团队
+## System Requirements
 
-核心价值：
+| Requirement | Windows | Linux |
+|-------------|---------|-------|
+| **OS** | Windows 10/11 (64-bit) | amd64 / arm64 |
+| **RAM** | 8 GB+ recommended | 8 GB+ recommended |
+| **Disk** | 2 GB+ free space | 2 GB+ free space |
+| **Binaries** | — | `xray` + `sing-box` in `bin/` |
 
-- 给每个账号分配独立浏览器实例
-- 给每个实例绑定独立代理
-- 统一管理浏览器内核、标签、关键字和快捷打开码
-- 在本地保存配置和运行数据，便于自主控制
+## Quick Start
 
-## 近期更新
+### Download
 
-### 1.7.3 · 2026-06-22
+Download the latest release from the [Releases](https://github.com/galaylm/bm-desktop-tool/releases) page.
 
-- 修复删除 OKX / 已导入扩展后实例重启又自动恢复的问题
-- 删除扩展时会同步解绑实例启动参数，并清理 Profile 内残留的扩展设置与固定图标数据
-- 未被任何实例继续引用的导入扩展目录会自动清理，避免旧扩展残留
+### Development
 
-### 1.7.2 · 2026-06-17
+```bash
+# Windows
+cd bat && dev.bat
 
-- 修复窗口同步顶部悬浮条在失焦时频繁闪烁、跳动的问题
-- 修复紧凑同步状态条底部偶发黑边，避免露出宿主窗口背景
-- 优化失焦态视觉，减少透明 WebView2 带来的抖动感
-- 保留独立同步面板关闭入口，同时避免启动初期误触导致看起来像主程序闪退
+# Linux
+# Refer to publish/linux/ for build scripts
+```
 
-### 1.5.6 · 2026-06-08
+> **Note:** The project uses `master` as its main branch.
 
-- 修复网站连接扩展程序时「登录请求」弹窗过大、与实际扩展弹窗尺寸不符的问题
-- 通用连接/登录请求弹窗会自动收敛到约 390x620，正常钱包官网页面不会被误缩小
+## Common Operations
 
-### 1.5.5 · 2026-06-08
-
-- 窗口同步独立面板补回右上角关闭按钮，避免无边框窗口没有系统关闭入口
-
-### 1.5.4 · 2026-06-08
-
-- 窗口同步独立面板改为深色不透明无边框宿主，降低透明 WebView2 面板闪退风险
-- 增加窗口同步面板启动与重复实例退出日志，后续异常能直接定位退出路径
-
-### 1.5.3 · 2026-06-08
-
-- 修复窗口同步器独立面板启动后几秒自动正常退出的问题
-- sync-panel 退出不再联动主程序托盘生命周期
-
-### 1.5.2 · 2026-06-07
-
-- 修复 Windows 托盘宿主隐藏窗样式，彻底避免 `GDI+ Window` 出现在任务栏预览、Alt-Tab 和悬浮缩略图里
-- 构建链路固定使用项目内修正后的 systray Windows 实现
-
-### 1.5.1 · 2026-06-06
-
-- 修复部分实例启动时的 ProcessSingleton 冲突误报
-- 无活进程占用时自动清理 Chromium 残留 Singleton 锁文件
-- 占用冲突时直接提示用户目录被哪个浏览器进程占用
-
-### 1.5.0 · 2026-06-06
-
-- 修复扩展图标点击后弹窗不显示的问题
-- 避免把主浏览器窗口误判成扩展弹窗
-- 清理测试环境中误带入的日本代理节点
-
-### 1.1.0 · 2026-03-19
-
-- 完善 Linux 支持
-- 新增 SOCKS 代理测试支持
-- 实验性支持接口触发浏览器
-
-完整历史版本记录见 [CHANGELOG.md](CHANGELOG.md)。
-
-## 核心特性
-
-- 实例隔离管理：支持创建、编辑、启动、停止、重启、克隆和删除浏览器实例
-- 代理池配置：支持统一维护代理节点，并将代理分配到具体实例
-- 多协议支持：支持常见代理配置方式，并支持导入 Clash
-- 内核管理：支持维护多个 Chrome 内核版本，并设置默认内核
-- 快捷启动：支持通过实例 Code 和 `Ctrl + K` 快速打开目标实例
-- 标签与检索：支持按标签、关键字、状态、代理、内核、分组进行筛选
-- 本地化存储：配置和实例数据保存在本地，适合长期使用和备份
-
-## 快速开始
-
-### 环境要求
-
-- 操作系统：
-  - Windows 10 / 11（64 位）
-  - Linux（amd64 / arm64）
-- 建议内存：8 GB 及以上
-- 建议磁盘空间：2 GB 以上
-
-### 从源码运行
-
-1. 开发默认使用 `master` 分支
-2. Windows 统一执行 `bat\dev.bat`；默认是稳定模式，如需前端 HMR 联调使用 `bat\dev.bat live`
-3. Windows 运行时使用 `bin/xray.exe`、`bin/sing-box.exe`；Linux 运行时使用 `bin/linux-<arch>/xray`、`bin/linux-<arch>/sing-box`
-
-### 准备浏览器内核
-
-1. 打开应用，进入 `指纹浏览器 > 内核管理`
-2. 优先使用应用内下载功能准备内核
-3. 如果手动准备内核，请确保目录下存在 `chrome.exe`
-
-### 第一次使用建议流程
-
-1. 在 `代理池配置` 中先导入或新增可用代理节点
-2. 在 `实例列表` 中点击 `新建配置`
-3. 选择实例名称、内核、代理、标签和需要的启动参数
-4. 返回实例列表，点击启动按钮运行实例
-5. 打开 IP 检测网站，确认代理结果是否符合预期
-
-## 常用操作
-
-| 目标 | 入口 | 说明 |
-| --- | --- | --- |
-| 新建浏览器实例 | `实例列表 > 新建配置` | 创建一个新的独立浏览器环境 |
-| 配置代理池 | `代理池配置` | 维护代理节点并检查延迟、健康状态 |
-| 绑定实例代理 | `实例编辑页` | 给指定实例分配目标代理节点 |
-| 启动实例 | `实例列表` | 单击启动按钮即可运行目标实例 |
-| 快速打开实例 | `Ctrl + K` | 可按 Code、实例名、标签、关键字快速检索 |
-| 管理浏览器内核 | `内核管理` | 新增、编辑、删除和设置默认内核 |
-
-## 常见问题
-
-### 1. 应用无法启动怎么办？
-
-先检查浏览器内核路径是否有效，并确认目标目录下存在 `chrome.exe`。
-
-### 2. 实例启动了但代理没有生效怎么办？
-
-先检查代理节点本身是否可用，再确认该实例已经正确绑定代理。
-
-### 3. 实例太多，怎么快速找到目标实例？
-
-可以在 `实例列表` 中按状态、代理、内核、分组、关键字筛选，也可以通过 `Ctrl + K` 使用实例 Code 或名称快速启动。
-
-### 4. 多个账号怎么避免串号？
-
-建议采用一账号一实例、一实例一稳定代理的方式，不要混用浏览器环境。
+| Action | Description |
+|--------|-------------|
+| Create instance | Define name, proxy, kernel version, and tags |
+| Start instance | Launches an isolated Chrome window |
+| Clone instance | Duplicate an existing instance with the same configuration |
+| Assign proxy | Bind or change proxy settings per instance |
+| Quick search | Press `Ctrl + K` to search and launch instances |
 
 ## Roadmap
 
-- 完善自动化模块能力
-- 持续补充使用文档和接口说明
-- 增强实例模板、批量管理和检索体验
+- [ ] Automation & scripting support
+- [ ] Batch instance operations
+- [ ] Export / Import instance configurations
+- [ ] Team collaboration features
 
-## License
+## Recent Updates
 
-当前仓库暂未附带独立的 LICENSE 文件，后续会补充。
+**v1.7.3** (2026-06-22)
+- Fixed instance persistence issues after importing extensions
+- Improved cleanup of unused extension directories
+
+---
+
+# 浏览器管理器
+
+> 面向多账号隔离、代理绑定和本地环境管理的跨平台桌面浏览器管理工具
+
+## 概述
+
+浏览器管理器是一款功能强大的桌面应用，让您可以在单台机器上创建和管理多个相互隔离的浏览器环境。每个实例可拥有独立的代理配置、浏览器指纹和本地存储空间，非常适合多账号运营、社交媒体管理、电商店铺运营以及隔离测试环境等场景。
+
+## 核心功能
+
+- **🧩 实例管理** — 创建、编辑、克隆、启动、停止和删除隔离浏览器实例，每个实例拥有独立配置文件
+- **🔌 代理支持** — 为每个实例配置 HTTP、HTTPS、SOCKS5 代理；支持导入 Clash 订阅链接及 VMess/VLESS/Trojan/Shadowsocks 协议
+- **⚙️ 内核管理** — 同时管理多个 Chrome 内核（fingerprint-chromium）版本
+- **⚡ 快捷操作** — 通过自定义短码或 `Ctrl + K` 快速搜索启动实例
+- **🏷️ 标签筛选** — 使用标签组织实例，按关键词筛选和按状态排序
+- **💾 本地优先** — 所有配置和数据存储在本地，无云端依赖，完全掌控隐私
+- **🔄 克隆复制** — 一键复制现有实例，保留所有设置
+
+## 推荐内核
+
+本项目推荐使用 [**fingerprint-chromium**](https://github.com/adryfish/fingerprint-chromium) 作为浏览器内核，以获得最佳的指纹识别和环境隔离支持。
+
+## 系统要求
+
+| 要求 | Windows | Linux |
+|------|---------|-------|
+| **操作系统** | Windows 10/11（64位） | amd64 / arm64 |
+| **内存** | 建议 8 GB 以上 | 建议 8 GB 以上 |
+| **磁盘** | 需 2 GB 以上可用空间 | 需 2 GB 以上可用空间 |
+| **依赖组件** | — | `xray` + `sing-box`（置于 `bin/` 目录） |
+
+## 快速开始
+
+### 下载
+
+从 [Releases](https://github.com/galaylm/bm-desktop-tool/releases) 页面下载最新版本。
+
+### 开发
+
+```bash
+# Windows
+cd bat && dev.bat
+
+# Linux
+参考 publish/linux/ 下的构建脚本
+```
+
+> **注意：** 项目使用 `master` 作为主分支。
+
+## 常用操作
+
+| 操作 | 说明 |
+|------|------|
+| 创建实例 | 定义名称、代理、内核版本和标签 |
+| 启动实例 | 打开一个隔离的 Chrome 窗口 |
+| 克隆实例 | 复制现有实例及全部配置 |
+| 绑定代理 | 为每个实例设置或更改代理 |
+| 快速搜索 | 按 `Ctrl + K` 搜索并启动实例 |
+
+## 开发路线
+
+- [ ] 自动化与脚本支持
+- [ ] 批量实例操作
+- [ ] 导入/导出实例配置
+- [ ] 团队协作功能
+
+## 最近更新
+
+**v1.7.3**（2026-06-22）
+- 修复导入扩展后实例持久化问题
+- 改进未使用扩展目录的清理机制
+
+---
+
+*Built with ❤️ for efficiency and privacy.*
