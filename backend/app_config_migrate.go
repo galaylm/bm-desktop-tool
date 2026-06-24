@@ -1,7 +1,7 @@
 package backend
 
 import (
-	appconfig "boost-browser/backend/internal/config"
+	appconfig "browser-manager/backend/internal/config"
 	"strings"
 )
 

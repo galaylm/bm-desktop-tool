@@ -1,7 +1,7 @@
 package main
 
 import (
-	"boost-browser/backend"
+	"browser-manager/backend"
 	"context"
 	"embed"
 	"encoding/json"

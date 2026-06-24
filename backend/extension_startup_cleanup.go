@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"boost-browser/backend/internal/logger"
+	"browser-manager/backend/internal/logger"
 
 	"github.com/gorilla/websocket"
 )

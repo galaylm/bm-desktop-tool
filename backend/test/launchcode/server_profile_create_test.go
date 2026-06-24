@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"boost-browser/backend/internal/browser"
-	"boost-browser/backend/internal/config"
-	"boost-browser/backend/internal/launchcode"
+	"browser-manager/backend/internal/browser"
+	"browser-manager/backend/internal/config"
+	"browser-manager/backend/internal/launchcode"
 )
 
 type managerBackedStarter struct {

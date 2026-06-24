@@ -1,7 +1,7 @@
 package backend
 
 import (
-	"boost-browser/backend/internal/config"
+	"browser-manager/backend/internal/config"
 	"errors"
 	"time"
 )

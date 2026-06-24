@@ -1,8 +1,8 @@
 package backend
 
 import (
-	appconfig "boost-browser/backend/internal/config"
-	apptray "boost-browser/backend/internal/tray"
+	appconfig "browser-manager/backend/internal/config"
+	apptray "browser-manager/backend/internal/tray"
 	"fmt"
 	"os"
 	"path/filepath"

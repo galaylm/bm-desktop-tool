@@ -1,7 +1,7 @@
 package backend
 
 import (
-	"boost-browser/backend/internal/apppath"
+	"browser-manager/backend/internal/apppath"
 )
 
 // appRootAbs 返回应用根目录的绝对路径，优先使用 App 注入的 appRoot。

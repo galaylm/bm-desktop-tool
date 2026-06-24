@@ -1,4 +1,4 @@
-module boost-browser
+module browser-manager
 
 go 1.22.0
 

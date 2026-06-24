@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"testing"
 
-	"boost-browser/backend/internal/launchcode"
+	"browser-manager/backend/internal/launchcode"
 )
 
 func TestLaunchServerStartWithAutoPort(t *testing.T) {

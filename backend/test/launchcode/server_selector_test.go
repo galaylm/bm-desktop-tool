@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"boost-browser/backend/internal/browser"
-	"boost-browser/backend/internal/launchcode"
+	"browser-manager/backend/internal/browser"
+	"browser-manager/backend/internal/launchcode"
 )
 
 func buildTestHandlerWithManager(svc *launchcode.LaunchCodeService, starter launchcode.BrowserStarter, mgr *browser.Manager) http.Handler {

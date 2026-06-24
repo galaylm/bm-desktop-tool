@@ -10,7 +10,7 @@ import (
 	"time"
 	"unsafe"
 
-	"boost-browser/backend/internal/logger"
+	"browser-manager/backend/internal/logger"
 
 	"golang.org/x/sys/windows"
 )

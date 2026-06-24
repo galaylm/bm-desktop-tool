@@ -1,8 +1,8 @@
 package backend
 
 import (
-	"boost-browser/backend/internal/apppath"
-	"boost-browser/backend/internal/backup"
+	"browser-manager/backend/internal/apppath"
+	"browser-manager/backend/internal/backup"
 	"time"
 )
 

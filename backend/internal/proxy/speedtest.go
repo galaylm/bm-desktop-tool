@@ -16,8 +16,8 @@ import (
 	C "github.com/metacubex/mihomo/constant"
 	"gopkg.in/yaml.v3"
 
-	"boost-browser/backend/internal/config"
-	"boost-browser/backend/internal/logger"
+	"browser-manager/backend/internal/config"
+	"browser-manager/backend/internal/logger"
 )
 
 // ─── Clash 标准测速 URL ───

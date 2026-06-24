@@ -1,7 +1,7 @@
 package browser
 
 import (
-	"boost-browser/backend/internal/config"
+	"browser-manager/backend/internal/config"
 	"os"
 	"path/filepath"
 	"runtime"

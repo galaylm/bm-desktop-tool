@@ -2,10 +2,10 @@ package backend
 
 import (
 	"archive/zip"
-	"boost-browser/backend/internal/backup"
-	"boost-browser/backend/internal/browser"
-	"boost-browser/backend/internal/config"
-	"boost-browser/backend/internal/logger"
+	"browser-manager/backend/internal/backup"
+	"browser-manager/backend/internal/browser"
+	"browser-manager/backend/internal/config"
+	"browser-manager/backend/internal/logger"
 	"crypto/sha256"
 	"database/sql"
 	"encoding/hex"

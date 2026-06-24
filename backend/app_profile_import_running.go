@@ -11,7 +11,7 @@ import (
 	"sort"
 	"strings"
 
-	"boost-browser/backend/internal/browser"
+	"browser-manager/backend/internal/browser"
 )
 
 type moreLoginRunningProfile struct {

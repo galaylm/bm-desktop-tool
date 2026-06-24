@@ -1,8 +1,8 @@
 package backend
 
 import (
-	"boost-browser/backend/internal/config"
-	"boost-browser/backend/internal/logger"
+	"browser-manager/backend/internal/config"
+	"browser-manager/backend/internal/logger"
 )
 
 type BrowserBookmark = config.BrowserBookmark

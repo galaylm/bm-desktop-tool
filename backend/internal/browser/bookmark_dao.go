@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"boost-browser/backend/internal/config"
+	"browser-manager/backend/internal/config"
 )
 
 // BookmarkDAO 默认书签持久化接口

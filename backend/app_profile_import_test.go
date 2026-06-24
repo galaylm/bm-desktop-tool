@@ -2,8 +2,8 @@ package backend
 
 import (
 	"archive/zip"
-	"boost-browser/backend/internal/browser"
-	"boost-browser/backend/internal/config"
+	"browser-manager/backend/internal/browser"
+	"browser-manager/backend/internal/config"
 	"os"
 	"path/filepath"
 	"strconv"

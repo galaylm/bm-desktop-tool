@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"boost-browser/backend/internal/config"
+	"browser-manager/backend/internal/config"
 )
 
 const defaultIPPureInfoURL = "https://my.ippure.com/v1/info"

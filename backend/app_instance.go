@@ -1,9 +1,9 @@
 package backend
 
 import (
-	"boost-browser/backend/internal/browser"
-	"boost-browser/backend/internal/logger"
-	"boost-browser/backend/internal/proxy"
+	"browser-manager/backend/internal/browser"
+	"browser-manager/backend/internal/logger"
+	"browser-manager/backend/internal/proxy"
 	"fmt"
 	"os"
 	"os/exec"

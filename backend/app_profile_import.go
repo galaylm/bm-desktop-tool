@@ -2,9 +2,9 @@ package backend
 
 import (
 	"archive/zip"
-	"boost-browser/backend/internal/browser"
-	"boost-browser/backend/internal/logger"
-	internalproxy "boost-browser/backend/internal/proxy"
+	"browser-manager/backend/internal/browser"
+	"browser-manager/backend/internal/logger"
+	internalproxy "browser-manager/backend/internal/proxy"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"

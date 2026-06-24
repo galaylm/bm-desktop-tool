@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"boost-browser/backend/internal/launchcode"
+	"browser-manager/backend/internal/launchcode"
 )
 
 func TestSetCodeAndResolveCaseInsensitive(t *testing.T) {

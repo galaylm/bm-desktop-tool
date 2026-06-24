@@ -1,10 +1,10 @@
 package proxy
 
 import (
-	"boost-browser/backend/internal/apppath"
-	"boost-browser/backend/internal/config"
-	"boost-browser/backend/internal/fsutil"
-	"boost-browser/backend/internal/logger"
+	"browser-manager/backend/internal/apppath"
+	"browser-manager/backend/internal/config"
+	"browser-manager/backend/internal/fsutil"
+	"browser-manager/backend/internal/logger"
 	"encoding/json"
 	"fmt"
 	"os"

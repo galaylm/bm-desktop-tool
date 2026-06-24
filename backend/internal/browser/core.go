@@ -1,8 +1,8 @@
 package browser
 
 import (
-	"boost-browser/backend/internal/fsutil"
-	"boost-browser/backend/internal/logger"
+	"browser-manager/backend/internal/fsutil"
+	"browser-manager/backend/internal/logger"
 	"encoding/json"
 	"fmt"
 	"os"

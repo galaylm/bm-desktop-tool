@@ -1,6 +1,6 @@
 package backend
 
-import "boost-browser/backend/internal/apppath"
+import "browser-manager/backend/internal/apppath"
 
 // EnsureRuntimeLayout 为运行时准备已安装应用的用户可写目录。
 func EnsureRuntimeLayout(appRoot string) error {

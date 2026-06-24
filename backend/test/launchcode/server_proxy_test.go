@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"boost-browser/backend/internal/browser"
+	"browser-manager/backend/internal/browser"
 )
 
 func mustDebugPortFromURL(t *testing.T, rawURL string) int {

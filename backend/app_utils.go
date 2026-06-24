@@ -1,10 +1,10 @@
 package backend
 
 import (
-	"boost-browser/backend/internal/apppath"
-	"boost-browser/backend/internal/browser"
-	"boost-browser/backend/internal/config"
-	"boost-browser/backend/internal/logger"
+	"browser-manager/backend/internal/apppath"
+	"browser-manager/backend/internal/browser"
+	"browser-manager/backend/internal/config"
+	"browser-manager/backend/internal/logger"
 	"fmt"
 	"net"
 	"os"

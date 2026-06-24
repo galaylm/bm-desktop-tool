@@ -1,7 +1,7 @@
 package browser
 
 import (
-	"boost-browser/backend/internal/logger"
+	"browser-manager/backend/internal/logger"
 	"path/filepath"
 	"strings"
 )

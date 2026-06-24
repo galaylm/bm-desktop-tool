@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"testing"
 
-	"boost-browser/backend/internal/proxy"
+	"browser-manager/backend/internal/proxy"
 )
 
 func TestTrojanClashYAML(t *testing.T) {

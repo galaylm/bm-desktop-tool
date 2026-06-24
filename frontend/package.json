@@ -1,5 +1,5 @@
 {
-  "name": "boost-browser-frontend",
+  "name": "browser-manager-frontend",
   "private": true,
   "version": "1.6.4",
   "type": "module",

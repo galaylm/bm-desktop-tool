@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"boost-browser/backend/internal/browser"
-	"boost-browser/backend/internal/launchcode"
+	"browser-manager/backend/internal/browser"
+	"browser-manager/backend/internal/launchcode"
 )
 
 type mockStarterWithParams struct {

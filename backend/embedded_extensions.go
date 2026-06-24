@@ -13,7 +13,7 @@ import (
 	"sort"
 	"strings"
 
-	"boost-browser/backend/internal/logger"
+	"browser-manager/backend/internal/logger"
 )
 
 // chromium-web-store helper 扩展（让 cloak/ungoogled-chromium 能在

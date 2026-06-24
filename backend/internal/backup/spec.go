@@ -1,7 +1,7 @@
 package backup
 
 import (
-	"boost-browser/backend/internal/config"
+	"browser-manager/backend/internal/config"
 	"fmt"
 	"os"
 	"path/filepath"

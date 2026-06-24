@@ -14,8 +14,8 @@ import (
 	"sync"
 	"time"
 
-	"boost-browser/backend/internal/browser"
-	"boost-browser/backend/internal/logger"
+	"browser-manager/backend/internal/browser"
+	"browser-manager/backend/internal/logger"
 )
 
 // BrowserStarter 浏览器启动接口（由 App 层实现并注入）

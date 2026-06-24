@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"boost-browser/backend"
+	"browser-manager/backend"
 
 	"golang.org/x/sys/windows"
 )

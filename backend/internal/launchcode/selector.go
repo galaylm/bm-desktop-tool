@@ -1,7 +1,7 @@
 package launchcode
 
 import (
-	"boost-browser/backend/internal/browser"
+	"browser-manager/backend/internal/browser"
 	"fmt"
 	"net/http"
 	"sort"

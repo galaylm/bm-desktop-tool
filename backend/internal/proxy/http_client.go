@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"boost-browser/backend/internal/config"
+	"browser-manager/backend/internal/config"
 
 	xproxy "golang.org/x/net/proxy"
 )

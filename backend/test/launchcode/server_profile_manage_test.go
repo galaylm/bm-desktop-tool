@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"boost-browser/backend/internal/browser"
-	"boost-browser/backend/internal/config"
+	"browser-manager/backend/internal/browser"
+	"browser-manager/backend/internal/config"
 )
 
 func TestListProfilesAPIIncludesLaunchCodes(t *testing.T) {

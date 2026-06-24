@@ -8,7 +8,7 @@ import (
 	"syscall"
 	"time"
 
-	"boost-browser/backend/internal/logger"
+	"browser-manager/backend/internal/logger"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )

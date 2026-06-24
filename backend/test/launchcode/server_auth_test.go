@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"boost-browser/backend/internal/launchcode"
+	"browser-manager/backend/internal/launchcode"
 )
 
 func buildAuthProtectedTestHandler() http.Handler {

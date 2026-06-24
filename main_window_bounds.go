@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"boost-browser/backend"
+	"browser-manager/backend"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )

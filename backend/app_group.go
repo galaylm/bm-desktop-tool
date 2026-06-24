@@ -1,8 +1,8 @@
 package backend
 
 import (
-	"boost-browser/backend/internal/browser"
-	"boost-browser/backend/internal/logger"
+	"browser-manager/backend/internal/browser"
+	"browser-manager/backend/internal/logger"
 	"fmt"
 )
 

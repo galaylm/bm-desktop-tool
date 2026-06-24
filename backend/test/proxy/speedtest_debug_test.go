@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"boost-browser/backend/internal/config"
-	"boost-browser/backend/internal/proxy"
+	"browser-manager/backend/internal/config"
+	"browser-manager/backend/internal/proxy"
 )
 
 // 模拟数据库中实际存储的 Clash YAML 格式代理配置

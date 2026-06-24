@@ -1,8 +1,8 @@
 package browser
 
 import (
-	"boost-browser/backend/internal/apppath"
-	"boost-browser/backend/internal/config"
+	"browser-manager/backend/internal/apppath"
+	"browser-manager/backend/internal/config"
 	"os/exec"
 	"sync"
 )

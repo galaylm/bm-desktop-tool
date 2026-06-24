@@ -13,8 +13,8 @@ import (
 	"strings"
 	"testing"
 
-	"boost-browser/backend/internal/browser"
-	"boost-browser/backend/internal/launchcode"
+	"browser-manager/backend/internal/browser"
+	"browser-manager/backend/internal/launchcode"
 
 	"github.com/leanovate/gopter"
 	"github.com/leanovate/gopter/gen"

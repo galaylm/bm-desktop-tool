@@ -1,10 +1,10 @@
 package main
 
 import (
-	"boost-browser/backend/internal/apppath"
-	"boost-browser/backend/internal/browser"
-	"boost-browser/backend/internal/config"
-	"boost-browser/backend/internal/database"
+	"browser-manager/backend/internal/apppath"
+	"browser-manager/backend/internal/browser"
+	"browser-manager/backend/internal/config"
+	"browser-manager/backend/internal/database"
 	"database/sql"
 	"encoding/binary"
 	"encoding/json"

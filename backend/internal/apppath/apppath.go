@@ -1,7 +1,7 @@
 package apppath
 
 import (
-	"boost-browser/backend/internal/fsutil"
+	"browser-manager/backend/internal/fsutil"
 	"io"
 	"os"
 	"path/filepath"

@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"boost-browser/backend/internal/logger"
+	"browser-manager/backend/internal/logger"
 )
 
 // cloak 内核默认启用的 chrome://flags 实验。

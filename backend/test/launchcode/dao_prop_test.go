@@ -9,7 +9,7 @@ import (
 	"os"
 	"testing"
 
-	"boost-browser/backend/internal/launchcode"
+	"browser-manager/backend/internal/launchcode"
 
 	"github.com/leanovate/gopter"
 	"github.com/leanovate/gopter/gen"
