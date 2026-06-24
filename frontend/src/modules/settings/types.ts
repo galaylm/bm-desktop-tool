@@ -25,6 +25,10 @@ export interface AppSettings {
   // 运行时设置
   maxMemoryMB: number
   gcPercent: number
+
+  // 缓存清理设置
+  autoCleanCache: boolean
+  autoCleanIntervalDays: number
 }
 
 export const defaultSettings: AppSettings = {
@@ -42,4 +46,33 @@ export const defaultSettings: AppSettings = {
   logLevel: 'info',
   maxMemoryMB: 1024,
   gcPercent: 100,
+  autoCleanCache: false,
+  autoCleanIntervalDays: 7,
+}
+
+// ─── 缓存清理类型 ──────────────────────────────────────
+
+export interface ProfileCacheInfo {
+  profileId: string
+  profileName: string
+  cacheSize: number
+  userDataDir: string
+}
+
+export interface CacheInfo {
+  totalCacheSize: number
+  profiles: ProfileCacheInfo[]
+  lastCleanAt: string
+}
+
+export interface CacheCleanResult {
+  freedBytes: number
+  cleanedDirs: number
+  message: string
+}
+
+export interface AutoCacheCleanConfig {
+  enabled: boolean
+  intervalDays: number
+  lastCleanAt: string
 }

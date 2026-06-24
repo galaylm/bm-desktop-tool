@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
-import { Save, RotateCcw, Upload, Download, RefreshCw } from 'lucide-react'
+import { useEffect, useRef, useState, useCallback } from 'react'
+import { Save, RotateCcw, Upload, Download, RefreshCw, Trash2, HardDrive } from 'lucide-react'
 import { Card, Button, FormItem, Input, Select, Switch, ThemeSwitcher, toast, Modal, Progress } from '../../shared/components'
-import { fetchSettings, saveSettings, resetSettings, initializeSystemData, exportSystemConfig, importSystemConfig } from './api'
-import type { AppSettings } from './types'
+import { fetchSettings, saveSettings, resetSettings, initializeSystemData, exportSystemConfig, importSystemConfig, getCacheInfo, cleanAllBrowserCache } from './api'
+import type { AppSettings, CacheInfo, CacheCleanResult } from './types'
 import { defaultSettings } from './types'
 import { EventsOn, EventsOff } from '../../wailsjs/runtime/runtime'
 import { useBackupStore } from '../../store/backupStore'
@@ -26,6 +26,14 @@ interface BackupExportLogItem {
   text: string
 }
 
+function formatFileSize(bytes: number): string {
+  if (bytes <= 0) return '0 B'
+  const units = ["B", "KB", "MB", "GB"]
+  const k = 1024
+  const i = Math.min(Math.floor(Math.log(bytes) / Math.log(k)), units.length - 1)
+  return (bytes / Math.pow(k, i)).toFixed(i > 0 ? 1 : 0) + ' ' + units[i]
+}
+
 export function SettingsPage() {
   const [settings, setSettings] = useState<AppSettings>(defaultSettings)
   const [loading, setLoading] = useState(true)
@@ -39,6 +47,11 @@ export function SettingsPage() {
   const exportLogsRef = useRef<HTMLDivElement | null>(null)
   const setImportState = useBackupStore((s) => s.setImportState)
   const clearImportState = useBackupStore((s) => s.clearImportState)
+  // Cache cleanup state
+  const [cacheInfo, setCacheInfo] = useState<CacheInfo | null>(null)
+  const [cacheLoading, setCacheLoading] = useState(false)
+  const [cacheCleaning, setCacheCleaning] = useState(false)
+  const [cacheResult, setCacheResult] = useState<CacheCleanResult | null>(null)
 
   useEffect(() => {
     loadSettings()
@@ -302,7 +315,49 @@ export function SettingsPage() {
     }
   }
 
-  const importRunning = actionLoading === 'import-reset' || actionLoading === 'import-merge'
+  // Cache cleanup handlers
+
+  const handleScanCache = useCallback(async () => {
+    setCacheLoading(true)
+    setCacheResult(null)
+    try {
+      const info = await getCacheInfo()
+      setCacheInfo(info)
+      if (!info || info.totalCacheSize <= 0) {
+        toast.info('暂无可清理的缓存')
+      }
+    } catch (error: any) {
+      toast.error(error?.message || '扫描缓存失败')
+    } finally {
+      setCacheLoading(false)
+    }
+  }, [])
+
+  const handleCleanCache = useCallback(async () => {
+    if (!confirm(`确定要清理所有浏览器实例的缓存吗？
+
+正在运行的实例将被跳过。
+清理后 Chrome 会自动重建缓存目录。`)) {
+      return
+    }
+    setCacheCleaning(true)
+    setCacheResult(null)
+    try {
+      const result = await cleanAllBrowserCache()
+      if (result) {
+        setCacheResult(result)
+        toast.success(result.message || '缓存清理完成')
+      }
+      const info = await getCacheInfo()
+      setCacheInfo(info)
+    } catch (error: any) {
+      toast.error(error?.message || '清理缓存失败')
+    } finally {
+      setCacheCleaning(false)
+    }
+  }, [])
+
+    const importRunning = actionLoading === 'import-reset' || actionLoading === 'import-merge'
 
   if (loading) {
     return (
@@ -472,6 +527,84 @@ export function SettingsPage() {
               ]}
             />
           </FormItem>
+        </div>
+      </Card>
+
+            {/* Cache cleanup */}
+      <Card title="缓存清理" subtitle="清理浏览器实例的冗余缓存文件，释放磁盘空间">
+        <div className="space-y-4">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-[var(--color-text-primary)]">自动清理缓存</p>
+                <p className="text-xs text-[var(--color-text-muted)] mt-0.5">定期自动清理浏览器缓存文件</p>
+              </div>
+              <Switch checked={settings.autoCleanCache} onChange={v => handleChange('autoCleanCache', v)} />
+            </div>
+            {settings.autoCleanCache && (
+              <div className="pl-4 border-l-2 border-[var(--color-border-muted)]">
+                <FormItem label="清理间隔">
+                  <Select
+                    value={String(settings.autoCleanIntervalDays)}
+                    onChange={e => handleChange('autoCleanIntervalDays', parseInt(e.target.value) || 7)}
+                    options={[
+                      { value: '1', label: '每天' },
+                      { value: '3', label: '每 3 天' },
+                      { value: '7', label: '每周' },
+                      { value: '14', label: '每两周' },
+                      { value: '30', label: '每月' },
+                    ]}
+                  />
+                </FormItem>
+              </div>
+            )}
+          </div>
+          <div className="h-px bg-[var(--color-border-muted)]" />
+          <div className="space-y-3">
+            <div className="flex items-center gap-3 flex-wrap">
+              <Button variant="secondary" size="sm" onClick={handleScanCache} loading={cacheLoading}>
+                <HardDrive className="w-4 h-4" />扫描缓存
+              </Button>
+              <Button size="sm" onClick={handleCleanCache} loading={cacheCleaning} disabled={!cacheInfo || cacheInfo.totalCacheSize <= 0}>
+                <Trash2 className="w-4 h-4" />立即清理
+              </Button>
+            </div>
+            {cacheInfo && (
+              <div className="rounded-md border border-[var(--color-border-default)] bg-[var(--color-bg-secondary)] p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-[var(--color-text-primary)]">缓存总大小</span>
+                  <span className="text-lg font-bold text-[var(--color-accent)]">{formatFileSize(cacheInfo.totalCacheSize)}</span>
+                </div>
+                {cacheInfo.lastCleanAt && (
+                  <p className="text-xs text-[var(--color-text-muted)] mb-2">上次清理：{new Date(cacheInfo.lastCleanAt).toLocaleString('zh-CN')}</p>
+                )}
+                {cacheInfo.profiles.length > 0 ? (
+                  <div className="space-y-1">
+                    {cacheInfo.profiles.map(p => (
+                      <div key={p.profileId} className="flex items-center justify-between text-xs text-[var(--color-text-secondary)] py-0.5">
+                        <span className="truncate max-w-[200px]">{p.profileName}</span>
+                        <span>{formatFileSize(p.cacheSize)}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-[var(--color-text-muted)]">暂无缓存数据</p>
+                )}
+              </div>
+            )}
+            {cacheResult && (
+              <div className="rounded-md px-3 py-2 text-sm bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800">
+                <p><strong>清理完成：</strong> {cacheResult.message}</p>
+                {cacheResult.freedBytes > 0 && (
+                  <p className="text-xs mt-1">释放空间：{formatFileSize(cacheResult.freedBytes)} &middot; 涉及实例：{cacheResult.cleanedDirs} 个</p>
+                )}
+              </div>
+            )}
+            <div className="rounded-md bg-[var(--color-bg-tertiary)] px-3 py-2">
+              <p className="text-xs text-[var(--color-text-muted)] leading-relaxed">清理内容包括：浏览器页面缓存（Cache）、代码缓存（Code Cache）、GPU 缓存（GPUCache）、Service Worker 缓存、Storage 分区缓存等。</p>
+              <p className="text-xs text-[var(--color-text-muted)] leading-relaxed mt-1">⎠ 正在运行的实例将被跳过。清理不会影响您的登录状态、书签、密码、本地存储等核心数据。</p>
+            </div>
+          </div>
         </div>
       </Card>
 

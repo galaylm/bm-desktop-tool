@@ -1,5 +1,5 @@
 // Settings 模块 API
-import type { AppSettings } from './types'
+import type { AppSettings, CacheInfo, CacheCleanResult, AutoCacheCleanConfig } from './types'
 import { defaultSettings } from './types'
 
 // 本地存储 key
@@ -82,4 +82,58 @@ export async function importSystemConfig(resetFirst: boolean): Promise<BackupAct
     return { cancelled: false, message: '当前环境不支持后端加载接口' }
   }
   return (await bindings.BackupImportPackage(resetFirst)) || {}
+}
+
+// ─── 缓存清理 API ──────────────────────────────────────
+
+// getCacheInfo 获取所有实例的缓存信息
+export async function getCacheInfo(): Promise<CacheInfo | null> {
+  const bindings: any = await getBindings()
+  if (!bindings?.GetCacheInfo) {
+    return null
+  }
+  try {
+    return (await bindings.GetCacheInfo()) || null
+  } catch {
+    return null
+  }
+}
+
+// cleanAllBrowserCache 清理所有浏览器实例缓存
+export async function cleanAllBrowserCache(): Promise<CacheCleanResult | null> {
+  const bindings: any = await getBindings()
+  if (!bindings?.CleanAllBrowserCache) {
+    return null
+  }
+  try {
+    return (await bindings.CleanAllBrowserCache()) || null
+  } catch {
+    return null
+  }
+}
+
+// getAutoCacheCleanConfig 获取自动清理设置
+export async function getAutoCacheCleanConfig(): Promise<AutoCacheCleanConfig | null> {
+  const bindings: any = await getBindings()
+  if (!bindings?.GetAutoCacheCleanConfig) {
+    return null
+  }
+  try {
+    return (await bindings.GetAutoCacheCleanConfig()) || null
+  } catch {
+    return null
+  }
+}
+
+// saveAutoCacheCleanConfig 保存自动清理设置
+export async function saveAutoCacheCleanConfig(cfg: AutoCacheCleanConfig): Promise<boolean> {
+  const bindings: any = await getBindings()
+  if (!bindings?.SaveAutoCacheCleanConfig) {
+    return false
+  }
+  try {
+    return !!(await bindings.SaveAutoCacheCleanConfig(cfg))
+  } catch {
+    return false
+  }
 }

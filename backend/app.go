@@ -177,6 +177,9 @@ func (a *App) startup(ctx context.Context) {
 		return
 	}
 	a.db = db
+
+	// 初始化缓存清理配置路径
+	initAutoCleanPath(a.appRoot)
 	if err := db.Migrate(); err != nil {
 		log.Error("数据库迁移失败", logger.F("error", err))
 	}
